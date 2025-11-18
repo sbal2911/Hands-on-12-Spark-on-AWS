@@ -57,8 +57,7 @@ Create two S3 buckets with globally unique names:
 * `cloudhandsonfinallanding`: This is where you will upload your raw data.
 * `cloudhandsonfinalprocessed`: This is where the processed data and query results will be stored.
 
-![alt text](<Screenshot 2025-11-18 at 2.41.52 PM.png>)
-
+<img width="749" height="280" alt="image" src="https://github.com/user-attachments/assets/1f03eaca-b1f3-42e0-af9e-a0dcb446121d" />
 
 ### 3. Create IAM Role for AWS Glue
 
@@ -75,7 +74,7 @@ Your Glue job needs permission to read from and write to S3.
 5.  Attach the `AmazonS3FullAccess` policy (for this demo) or a more restrictive policy that only grants access to your two buckets.
 6.  Name the role `AWSGlueServiceRole-Reviews` and create it.
 
-![alt text](<Screenshot 2025-11-18 at 2.44.01 PM.png>)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/5a0ba97b-70b4-4394-a387-6e41a391f187" />
 
 ### 4. Create the AWS Glue ETL Job
 
@@ -94,7 +93,8 @@ ETL (Extract, Transform, Load) jobs automate data processing. Glue ETL jobs read
 
 > **Note:** The script is already configured to use the `cloudhandsonfinallanding` and `cloudhandsonfinalprocessed` buckets.
 
-![alt text](<Screenshot 2025-11-18 at 2.46.08 PM.png>)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/ae56e574-3ce0-40e1-97ce-8e207078f16a" />
+
 
 ### 5. Create the Lambda Trigger Function
 
@@ -111,13 +111,14 @@ This function will start the Glue job when a file is uploaded.
 5.  **Permissions:** Under "Change default execution role," select **Create a new role with basic Lambda permissions**. This role will be automatically named.
 6.  Create the function.
 
-![alt text](<Screenshot 2025-11-18 at 2.47.40 PM.png>)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/7cdd7ffd-db37-4b3e-9b11-a719774589fd" />
+
 
 #### 5a. Add Lambda Code
 
 Paste the contents of `src/lambda function.py` into the code editor. Make sure the `GLUE_JOB_NAME` variable matches the name of your Glue job (`process_reviews_job`).
 
-![alt text](image.png)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/3b0e687d-beb2-4a9d-8779-d3e3a23c8fcc" />
 
 #### 5b. Add Lambda Permissions
 
@@ -143,7 +144,7 @@ The new Lambda role needs permission to start a Glue job.
     ```
 4.  Name the policy `Allow-Glue-StartJobRun` and save it.
 
-![alt text](image-1.png)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/1d383f99-95e8-4130-8865-40d49a5b0a08" />
 
 #### 5c. Add the S3 Trigger
 
@@ -158,7 +159,7 @@ S3 can trigger Lambda functions when certain events occur, such as file uploads.
 5.  Set the **Event type** to `s3:ObjectCreated:*` (or "All object create events").
 6.  Acknowledge the recursive invocation warning and click **Add**.
 
-![alt text](image-2.png)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/9a734d1e-f7a8-46be-962e-94a9cdd98635" />
 
 ---
 
@@ -167,7 +168,7 @@ S3 can trigger Lambda functions when certain events occur, such as file uploads.
 Your pipeline is now fully deployed and automated!
 
 1.  Take the sample `reviews.csv` file from the `data/` directory.
-2.  Upload `reviews.csv` to the root of your `handsonfinallanding` S3 bucket.
+2.  Upload `reviews.csv` to the root of your `cloudhandsonfinallanding` S3 bucket.
 3.  This will trigger the Lambda, which in turn starts the Glue job.
 4.  You can monitor the job's progress in the **AWS Glue** console under the **Monitoring** tab.
 
@@ -175,15 +176,15 @@ Your pipeline is now fully deployed and automated!
 
 ## CloudWatch Logs
 
-AWS CloudWatch Logs is a monitoring service that collects and stores log files from AWS resources, such as Lambda functions, EC2 instances, and other services. It allows you to track the execution, performance, and errors of your applications in real time.
+AWS CloudWatch Logs is a monitoring service that collects and stores log files from AWS resources, such as Lambda functions, EC2 instances, and other services. It enables you to track the execution, performance, and errors of your applications in real-time.
 
 The snippet shows the Lambda function execution: it logs the initialization (**INIT_START**), function start (**START**), Glue job start message, successful job trigger with the JobRunId, and the function end (**END**) along with execution metrics such as duration, memory used, and billed duration. This helps in auditing, debugging, and monitoring automated ETL pipelines.
 
 **Approach**
 
-Use CloudWatch Logs to verify that the Lambda function correctly triggers the Glue ETL job. Check for any errors or failed invocations, measure execution duration and memory usage, and ensure that the Glue job starts successfully by monitoring the printed JobRunId. Regularly review logs to ensure reliability of the event-driven workflow.
+Use CloudWatch Logs to verify that the Lambda function triggers the Glue ETL job correctly. Check for any errors or failed invocations, measure execution duration and memory usage, and ensure that the Glue job starts successfully by monitoring the printed JobRunId. Regularly review logs to ensure reliability of the event-driven workflow.
 
-![alt text](image-8.png)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/06f8a06c-e06a-465c-9352-97686007fc15" />
 
 ---
 
@@ -193,29 +194,29 @@ Each analytics query is executed via Spark SQL in the Glue job. The results are 
 
 The Glue ETL job generates multiple analytics reports, each saved as Parquet files in the `cloudhandsonfinalprocessed` bucket:
 
-![alt text](image-9.png)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/817dc8be-c445-474e-9d5a-c84ce586a812" />
 
-![alt text](image-10.png)
+<img width="749" height="417" alt="image" src="https://github.com/user-attachments/assets/73cc2c01-18c4-43ba-8e45-47346b7b65cd" />
 
 - **Cleaned Dataset:** s3://cloudhandsonfinalprocessed/processed-data/ – contains the full cleaned CSV converted to a standard format.
 
-![alt text](image-3.png)
+<img width="1123" height="705" alt="Screenshot 2025-11-18 at 2 27 47 PM" src="https://github.com/user-attachments/assets/90198a5a-435f-403e-a18c-ead895124b56" />
 
 - **Average Ratings per Product:** s3://cloudhandsonfinalprocessed/Athena Results/average_ratings/ – lists each product and its average rating.
 
-![alt text](image-4.png)
+<img width="1123" height="772" alt="Screenshot 2025-11-18 at 2 25 12 PM" src="https://github.com/user-attachments/assets/e8816384-f46c-4668-a7fd-2a6d159e50f0" />
 
 - **Date-wise Review Counts:** s3://cloudhandsonfinalprocessed/Athena Results/daily_review_counts/ – shows total reviews submitted each day.
 
-![alt text](image-5.png)
+<img width="1123" height="705" alt="Screenshot 2025-11-18 at 2 26 01 PM" src="https://github.com/user-attachments/assets/fbcd5b25-75a3-4849-a562-db46cab10855" />
 
 - **Top 5 Most Active Customers:** s3://cloudhandsonfinalprocessed/Athena Results/top_5_customers/ – identifies the customers with the most reviews.
 
-![alt text](image-6.png)
+<img width="1123" height="705" alt="Screenshot 2025-11-18 at 2 27 12 PM" src="https://github.com/user-attachments/assets/5faddb6d-fc56-4e9e-893a-4aa6e14784ed" />
 
 - **Rating Distribution:** s3://cloudhandsonfinalprocessed/Athena Results/rating_distribution/ – provides counts for each star rating.
 
-![alt text](image-7.png)
+<img width="1123" height="705" alt="Screenshot 2025-11-18 at 2 26 37 PM" src="https://github.com/user-attachments/assets/f8dd4a48-e41c-4195-b9b1-1fc3983d6bf8" />
 
 ---
 ## 🧹 Cleanup
