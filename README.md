@@ -222,7 +222,7 @@ The Glue ETL job generates multiple analytics reports, each saved as Parquet fil
 ## 🧹 Cleanup
 
 To avoid any future charges (especially if you're on the Free Tier), be sure to delete the resources you created:
-1.  Empty and delete the `handsonfinallanding` and `handsonfinalprocessed` S3 buckets.
+1.  Empty and delete the `cloudhandsonfinallanding` and `cloudhandsonfinalprocessed` S3 buckets.
 2.  Delete the `start_glue_job_trigger` Lambda function.
 3.  Delete the `process_reviews_job` Glue job.
 4.  Delete the `AWSGlueServiceRole-Reviews` IAM role.
